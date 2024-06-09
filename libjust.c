@@ -60,7 +60,7 @@ int jnext_key_event(window_t* window, KeySym* key)
 	while (1) {
 		XNextEvent(window->dp, &ev);
 
-		if (ev.type != KeyPress && ev.type != KeyRelease) {
+		if (ev.type != KeyPress) {
 			continue;
 		}
 
