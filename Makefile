@@ -1,13 +1,14 @@
 CC:=clang
-CFLAGS:=-Wall -Wextra -lX11
+CFLAGS:=-Wall -Wextra -g
+LDFLAGS:=-lX11
 
 all:jmenu
 jmenu:jmenu.o libjust.o
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(CC) -o $@ $^ $(LDFLAGS)
 jmenu.o:jmenu.c
-	$(CC) -g -c $<
+	$(CC) -c $< $(CFLAGS) 
 libjust.o:libjust.c
-	$(CC) -g -c $<
+	$(CC) -c $< $(CFLAGS)
 clean:
 	rm *.o jmenu
 .PHONY: clean all
