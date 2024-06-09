@@ -1,9 +1,10 @@
 CC:=clang
 CFLAGS:=-Wall -Wextra -g
 LDFLAGS:=-lX11
+APP:=jmenu
 
-all:jmenu
-jmenu:jmenu.o libjust.o
+all:$(APP)
+$(APP):jmenu.o libjust.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 jmenu.o:jmenu.c
 	$(CC) -c $< $(CFLAGS) 
