@@ -1,17 +1,23 @@
 CC:=clang
-CFLAGS:=-Wall -Wextra -g $(shell pkg-config --cflags freetype2)
-LDFLAGS:=$(shell pkg-config --libs x11 xft freetype2)
+MODE:=debug
 APP:=jmenu
 
+CFLAGS_common:=-Wall -Wextra $(shell pkg-config --cflags freetype2)
+CFLAGS_debug:=-g
+CFLAGS_release:=-O2
+CFLAGS=$(CFLAGS_$(MODE)) $(CFLAGS_common)
+
+LDFLAGS_common:=$(shell pkg-config --libs x11 xft freetype2)
+LDFLAGS_release:=-s
+LDFLAGS=$(LDFLAGS_$(MODE)) $(LDFLAGS_common)
+
 all:$(APP)
-$(APP):jmenu.o x11.o util.o
+$(APP):jmenu.o util.o
 	$(CC) -o $@ $^ $(LDFLAGS)
-jmenu.o:jmenu.c
-	$(CC) -c $<    $(CFLAGS) 
-x11.o:x11.c
-	$(CC) -c $<    $(CFLAGS)
+jmenu.o:jmenu.c x11.h
+	$(CC) -c $< $(CFLAGS)
 util.o:util.c
-	$(CC) -c $<    $(CFLAGS)
+	$(CC) -c $< $(CFLAGS)
 clean:
 	rm *.o jmenu
 .PHONY: clean all
