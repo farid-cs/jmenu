@@ -1,3 +1,5 @@
 *.o
 jmenu
-ref/
+.ref/
+DEBUG/
+RELEASE/

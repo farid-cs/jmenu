@@ -1,0 +1,15 @@
+CC=cc
+MODE=DEBUG
+
+CFLAGS_COMMON=-Wall -Wextra -I/usr/include/freetype2
+LDFLAGS_COMMON=-lX11 -lXft -lfreetype
+
+CFLAGS_DEBUG=-g
+LDFLAGS_DEBUG=
+
+CFLAGS_RELEASE=-O2
+LDFLAGS_RELEASE=-s
+
+# Overwrite as needed
+CFLAGS=$(CFLAGS_$(MODE)) $(CFLAGS_COMMON)
+LDFLAGS=$(LDFLAGS_$(MODE)) $(LDFLAGS_COMMON)
