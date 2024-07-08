@@ -1,12 +1,15 @@
 include config.mk
 APP=jmenu
-SRC=jmenu.c x11.c line_buf.c
+SRC=jmenu.c x11.c line_buf.c util.c
 OBJ=$(SRC:.c=.o)
 
 $(APP):$(OBJ)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-$(OBJ):util.h config.h config.mk
+test:$(APP)
+	echo Some text | ./$(APP)
+
+$(OBJ):util.h x11.h config.h config.mk
 %.o:%.c
 	$(CC) -c $< $(CFLAGS)
 

@@ -1,8 +1,10 @@
 #include "line_buf.h"
 #include <string.h>
 
-static void push(struct stack*, int val);
-static int  pop(struct stack*);
+static int utf8_tail(char byte)
+{
+	return (byte & 0xc0) == 0x80;
+}
 
 void append_text(struct line_buf* line, struct text* text)
 {
@@ -10,27 +12,18 @@ void append_text(struct line_buf* line, struct text* text)
 		return;
 
 	memcpy(line->buf + line->pos, text->buf, text->size);
-
 	line->pos += text->size;
-	push(&line->sizes, text->size);
 }
 
 void backspace(struct line_buf* line)
 {
+	char *byte = line->buf + line->pos - 1;
+
 	if (line->pos == 0) return;
 
-	line->pos -= pop(&line->sizes);
-}
+	while (utf8_tail(*byte)) {
+		byte--;
+	}
 
-void push(struct stack* stack, int val)
-{
-	if (stack->top < sizeof(stack->buf))
-		stack->buf[stack->top++] = val;
-}
-
-int pop(struct stack* stack)
-{
-	if (stack->top > 0)
-		return stack->buf[--stack->top];
-	return 0;
+	line->pos = byte - line->buf;
 }

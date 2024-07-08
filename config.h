@@ -4,4 +4,4 @@ const char* font             = "FreeSans-15";
 const int   border_width     = 0;
 const int   pos_x            = 0;
 const int   pos_y            = 0;
-const int   width            = -1;
+const int   window_width     = -1;

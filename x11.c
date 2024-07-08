@@ -55,9 +55,9 @@ int open_window(int x, int y, int w, int h, int bw)
 		&xwa
 	);
 
-	gc = XCreateGC(con,window,0,NULL);
+	gc = XCreateGC(con, window, 0, NULL);
 
-	XMapWindow(con,window);
+	XMapWindow(con, window);
 	XFlush(con);
 
 	return 0;
@@ -65,7 +65,7 @@ int open_window(int x, int y, int w, int h, int bw)
 
 int grab_keyboard()
 {
-	while (XGrabKeyboard(con,root,1,GrabModeAsync,GrabModeAsync,CurrentTime) != GrabSuccess);
+	while (XGrabKeyboard(con, root, 1, GrabModeAsync, GrabModeAsync, CurrentTime) != GrabSuccess);
 	return 0;
 }
 
@@ -76,7 +76,13 @@ int next_event()
 	}
 
 	if (current_event.type == KeyPress) {
-		key.text.size = XLookupString(&current_event.xkey, key.text.buf, sizeof(key.text.buf), &key.keysym, NULL);
+		key.text.size = XLookupString(
+			&current_event.xkey,
+			key.text.buf,
+			sizeof(key.text.buf),
+			&key.keysym,
+			NULL
+		);
 	}
 
 	return 0;
@@ -99,12 +105,12 @@ struct text* key_to_text()
 
 void ungrab_keyboard()
 {
-	XUngrabKeyboard(con,CurrentTime);
+	XUngrabKeyboard(con, CurrentTime);
 }
 
 int set_font(const char* font_name)
 {
-	font = XftFontOpenName(con,screen,font_name);
+	font = XftFontOpenName(con, screen, font_name);
 	if (font == NULL) {
 		return -1;
 	}
@@ -130,10 +136,10 @@ int set_fg_color(const char* color_code)
 
 int set_bg_color(const char* color_code)
 {
-	if (!XParseColor(con, DefaultColormap(con, 0), color_code, &bg_color)) {
+	if (!XParseColor(con, DefaultColormap(con,screen), color_code, &bg_color)) {
 		return -1;
 	}
-	if (!XAllocColor(con, DefaultColormap(con, 0), &bg_color)) {
+	if (!XAllocColor(con, DefaultColormap(con,screen), &bg_color)) {
 		return -1;
 	}
 	return 0;
@@ -141,13 +147,13 @@ int set_bg_color(const char* color_code)
 
 int clear_window()
 {
-	XClearWindow(con,window);
+	XClearWindow(con, window);
 	return 0;
 }
 
 int create_draw()
 {
-	draw = XftDrawCreate(con,window,DefaultVisual(con,screen),DefaultColormap(con,screen));
+	draw = XftDrawCreate(con, window, DefaultVisual(con,screen), DefaultColormap(con,screen));
 	if (draw == NULL) {
 		return -1;
 	}
@@ -159,7 +165,7 @@ int draw_string(const char* string, const int len)
 	XftDrawStringUtf8(
 		draw,
 		&fg_color,
-	        font,
+		font,
 		0,
 		font->ascent,
 		(XftChar8*)string,
@@ -170,13 +176,13 @@ int draw_string(const char* string, const int len)
 
 void free_font()
 {
-	XftFontClose(con,font);
+	XftFontClose(con, font);
 }
 
 void free_colors()
 {
-	XftColorFree(con,DefaultVisual(con,screen),DefaultColormap(con,screen),&fg_color);
-	XFreeColors(con,DefaultColormap(con,screen),&bg_color.pixel,1,0);
+	XftColorFree(con, DefaultVisual(con,screen), DefaultColormap(con,screen), &fg_color);
+	XFreeColors(con, DefaultColormap(con,screen), &bg_color.pixel, 1, 0);
 }
 
 void free_draw()
@@ -186,8 +192,8 @@ void free_draw()
 
 void close_window()
 {
-	XFreeGC(con,gc);
-	XDestroyWindow(con,window);
+	XFreeGC(con, gc);
+	XDestroyWindow(con, window);
 }
 
 void x11_disconnect()
