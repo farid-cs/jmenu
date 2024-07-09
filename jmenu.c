@@ -20,7 +20,7 @@ static char* read_stdin(const int buf_size)
 	return buf;
 }
 
-static int init_joke()
+static int init()
 {
 	input = read_stdin(3000);
 	if (!input) {
@@ -140,7 +140,7 @@ static int clean()
 
 int main()
 {
-	if (init_joke()) {
+	if (init()) {
 		return 1;
 	}
 	if (run()) {
