@@ -37,8 +37,8 @@ int open_window(int x, int y, int w, int h, int bw)
 		.override_redirect = 1,
 	};
 
-	if (w <= 0) w = DisplayWidth(con,window);
-	if (h <= 0) h = DisplayHeight(con,window);
+	if (w <= 0) w = DisplayWidth(con, screen);
+	if (h <= 0) h = DisplayHeight(con, screen);
 	
 	window = XCreateWindow(
 		con,
