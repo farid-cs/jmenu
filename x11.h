@@ -19,7 +19,7 @@ extern int    set_bg_color(const char*);
 extern void   free_font();
 extern void   free_colors();
 extern int    create_draw();
-extern int    draw_string(const char*, const int);
+extern int    draw_string(const char*, const size_t);
 extern void   free_draw();
 extern int    next_event();
 extern XEvent event();

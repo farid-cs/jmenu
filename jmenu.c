@@ -26,7 +26,7 @@ static int init()
 	if (!input) {
 		return -1;
 	}
-	if (setlocale(LC_CTYPE, "") == NULL) { /* I'm not sure why but it's needed. */
+	if (setlocale(LC_CTYPE, "") == NULL) {
 		eputs("Can't set default locale");
 		return -1;
 	}

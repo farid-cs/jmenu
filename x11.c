@@ -160,7 +160,7 @@ int create_draw()
 	return 0;
 }
 
-int draw_string(const char* string, const int len)
+int draw_string(const char* string, const size_t len)
 {
 	XftDrawStringUtf8(
 		draw,
