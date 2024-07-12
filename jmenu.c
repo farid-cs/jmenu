@@ -90,8 +90,8 @@ static int keypress()
 static int handle_event()
 {
 	switch (event().type) {
-		case KeyPress: return keypress();
-		default: break;
+	case KeyPress: return keypress();
+	default: break;
 	}
 	return 0;
 }
