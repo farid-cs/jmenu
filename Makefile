@@ -3,6 +3,8 @@ APP=jmenu
 SRC=jmenu.c x11.c line_buf.c util.c
 OBJ=$(SRC:.c=.o)
 
+build:$(APP)
+
 $(APP):$(OBJ)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
@@ -16,4 +18,4 @@ $(OBJ):util.h x11.h config.h config.mk
 clean:
 	rm -rf *.o jmenu
 
-.PHONY: clean all
+.PHONY: clean build
