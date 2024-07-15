@@ -10,7 +10,6 @@ static Display* con = NULL;
 static int      screen;
 static Window   root;
 static Window   window;
-static GC       gc;
 static XEvent   current_event;
 static Key      key = {0};
 static XftFont* font = NULL;
@@ -54,8 +53,6 @@ int open_window(int x, int y, int w, int h, int bw)
 		CWOverrideRedirect | CWBackPixel | CWEventMask,
 		&xwa
 	);
-
-	gc = XCreateGC(con, window, 0, NULL);
 
 	XMapWindow(con, window);
 	XFlush(con);
@@ -192,7 +189,6 @@ void free_draw()
 
 void close_window()
 {
-	XFreeGC(con, gc);
 	XDestroyWindow(con, window);
 }
 
