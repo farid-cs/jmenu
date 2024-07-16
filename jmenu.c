@@ -6,7 +6,7 @@
 #include "x11.h"
 
 static struct line_buf input_line = {0};
-static const char* input;
+static char* input;
 
 static char* read_stdin(const int buf_size)
 {
@@ -24,6 +24,7 @@ static int init()
 {
 	input = read_stdin(3000);
 	if (!input) {
+		eputs("Can't read from stdin");
 		return -1;
 	}
 	if (setlocale(LC_CTYPE, "") == NULL) {
@@ -135,6 +136,7 @@ static int clean()
 	ungrab_keyboard();
 	close_window();
 	x11_disconnect();
+	free(input);
 	return 0;
 }
 
