@@ -20,4 +20,4 @@ line_buf.o: line_buf.c line_buf.h
 clean:
 	rm -rf *.o jmenu
 
-.PHONY: clean build
+.PHONY: clean test
