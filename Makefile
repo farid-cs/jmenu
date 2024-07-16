@@ -3,8 +3,6 @@ APP=jmenu
 SRC=jmenu.c x11.c line_buf.c util.c
 OBJ=$(SRC:.c=.o)
 
-build:$(APP)
-
 $(APP):$(OBJ)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
