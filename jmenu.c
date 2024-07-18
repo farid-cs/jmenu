@@ -5,6 +5,19 @@
 #include "util.h"
 #include "x11.h"
 
+enum error {
+	NO_ERROR,
+	READ_ERR,
+	LOCALE_ERR,
+	CONNECTION_ERR,
+	FG_COLOR_ERR,
+	BG_COLOR_ERR,
+	FONT_ERR,
+	WINDOW_ERR,
+	GRAB_ERR,
+	DRAW_ERR,
+};
+
 static struct line_buf input_line = {0};
 static char* input;
 
@@ -25,39 +38,39 @@ static int init()
 	input = read_stdin(3000);
 	if (!input) {
 		eputs("Can't read from stdin");
-		return -1;
+		return READ_ERR;
 	}
 	if (setlocale(LC_CTYPE, "") == NULL) {
 		eputs("Can't set default locale");
-		return -1;
+		return LOCALE_ERR;
 	}
 	if (x11_connect()) {
 		eputs("Can't connect to X11 server");
-		return -1;
+		return CONNECTION_ERR;
 	}
 	if (set_fg_color(foreground_color)) {
 		eputs("Can't set foreground color");
-		return -1;
+		return FG_COLOR_ERR;
 	}
 	if (set_bg_color(background_color)) {
 		eputs("Can't set background color");
-		return -1;
+		return BG_COLOR_ERR;
 	}
 	if (set_font(font)) {
 		eputs("Can't set font");
-		return -1;
+		return FONT_ERR;
 	}
 	if (open_window(pos_x, pos_y, window_width, font_height(), border_width)) {
 		eputs("Can't open the window");
-		return -1;
+		return WINDOW_ERR;
 	}
 	if (grab_keyboard()) {
 		eputs("Can't grab the keyboard");
-		return -1;
+		return GRAB_ERR;
 	}
 	if (create_draw()) {
 		eputs("Can't create a draw");
-		return -1;
+		return DRAW_ERR;
 	}
 	return 0;
 }
@@ -91,8 +104,10 @@ static int keypress()
 static int handle_event()
 {
 	switch (event().type) {
-	case KeyPress: return keypress();
-	default: break;
+	case KeyPress:
+		return keypress();
+	default:
+		break;
 	}
 	return 0;
 }
@@ -128,28 +143,45 @@ static int run()
 	return -1;
 }
 
-static int clean()
+static int clean(enum error err)
 {
-	free_draw();
-	free_font();
-	free_colors();
-	ungrab_keyboard();
-	close_window();
-	x11_disconnect();
-	free(input);
+	switch (err) {
+	case NO_ERROR:
+		free_draw();
+	case DRAW_ERR:
+		ungrab_keyboard();
+	case GRAB_ERR:
+		close_window();
+	case WINDOW_ERR:
+		free_font();
+	case FONT_ERR:
+		free_bg_color();
+	case BG_COLOR_ERR:
+		free_fg_color();
+	case FG_COLOR_ERR:
+		x11_disconnect();
+	case CONNECTION_ERR:
+	case LOCALE_ERR:
+		free(input);
+	case READ_ERR:
+		break;
+	}
+
 	return 0;
 }
 
 int main()
 {
-	if (init()) {
+	int err = init();
+	if (err) {
+		clean(err);
 		return 1;
 	}
 	if (run()) {
-		clean();
+		clean(NO_ERROR);
 		return 1;
 	}
-	if (clean()) {
+	if (clean(NO_ERROR)) {
 		return 1;
 	}
 	return 0;

@@ -176,10 +176,14 @@ void free_font()
 	XftFontClose(con, font);
 }
 
-void free_colors()
+void free_bg_color()
+{
+	XFreeColors(con, DefaultColormap(con,screen), &bg_color.pixel, 1, 0);
+}
+
+void free_fg_color()
 {
 	XftColorFree(con, DefaultVisual(con,screen), DefaultColormap(con,screen), &fg_color);
-	XFreeColors(con, DefaultColormap(con,screen), &bg_color.pixel, 1, 0);
 }
 
 void free_draw()
