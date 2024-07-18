@@ -1,4 +1,5 @@
 #include "x11.h"
+#include <X11/Xft/Xft.h>
 #include <assert.h>
 
 typedef struct Key {
