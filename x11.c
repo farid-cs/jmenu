@@ -7,14 +7,14 @@ typedef struct Key {
 	KeySym keysym;
 } Key;
 
-static Display* con = NULL;
+static Display* con;
 static int      screen;
 static Window   root;
 static Window   window;
 static XEvent   current_event;
 static Key      key = {0};
-static XftFont* font = NULL;
-static XftDraw* draw = NULL;
+static XftFont* font;
+static XftDraw* draw;
 static XftColor fg_color;
 static XColor   bg_color;
 
@@ -174,6 +174,9 @@ int draw_string(const char* string, const size_t len)
 
 void free_font()
 {
+	if (font == NULL) {
+		return;
+	}
 	XftFontClose(con, font);
 }
 
@@ -189,11 +192,17 @@ void free_fg_color()
 
 void free_draw()
 {
+	if (draw == NULL) {
+		return;
+	}
 	XftDrawDestroy(draw);
 }
 
 void close_window()
 {
+	if (window == None) {
+		return;
+	}
 	XDestroyWindow(con, window);
 }
 
