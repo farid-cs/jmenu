@@ -6,9 +6,10 @@
 #include "x11.h"
 
 static struct line_buf input_line = {0};
-static char* input;
+static char *input;
 
-static char* read_stdin(const int buf_size)
+static char *
+read_stdin(const int buf_size)
 {
 	char *buf = calloc(1, buf_size);
 	if (buf == NULL) {
@@ -24,7 +25,8 @@ static char* read_stdin(const int buf_size)
 	return buf;
 }
 
-static int init()
+static int
+init()
 {
 	input = read_stdin(3000);
 	if (!input) {
@@ -66,7 +68,8 @@ static int init()
 	return 0;
 }
 
-static int keypress()
+static int
+keypress()
 {
 	switch (which_key()) {
 	case XK_Shift_L:
@@ -91,7 +94,8 @@ static int keypress()
 	return 0;
 }
 
-static int handle_event()
+static int
+handle_event()
 {
 	switch (event().type) {
 	case KeyPress:
@@ -102,7 +106,8 @@ static int handle_event()
 	return 0;
 }
 
-static int draw_menu()
+static int
+draw_menu()
 {
 	if (clear_window()) {
 		eputs("Can't clear the window");
@@ -115,7 +120,8 @@ static int draw_menu()
 	return 0;
 }
 
-static int run()
+static int
+run()
 {
 	while (!next_event()) {
 		switch (handle_event()) {
@@ -133,7 +139,8 @@ static int run()
 	return -1;
 }
 
-static void clean()
+static
+void clean()
 {
 	free_draw();
 	ungrab_keyboard();
@@ -145,7 +152,8 @@ static void clean()
 	free(input);
 }
 
-int main()
+int
+main()
 {
 	if (init()) {
 		goto ERROR;

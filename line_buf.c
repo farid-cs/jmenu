@@ -1,12 +1,14 @@
 #include "line_buf.h"
 #include <string.h>
 
-static int utf8_tail(char byte)
+static int
+utf8_tail(char byte)
 {
 	return (byte & 0xc0) == 0x80;
 }
 
-void append_text(struct line_buf* line, struct text* text)
+void
+append_text(struct line_buf *line, struct text *text)
 {
 	if (line->pos + text->size > sizeof(line->buf))
 		return;
@@ -15,7 +17,8 @@ void append_text(struct line_buf* line, struct text* text)
 	line->pos += text->size;
 }
 
-void backspace(struct line_buf* line)
+void
+backspace(struct line_buf *line)
 {
 	char *byte = line->buf + line->pos - 1;
 

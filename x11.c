@@ -18,7 +18,8 @@ static XftDraw* draw;
 static XftColor fg_color;
 static XColor   bg_color;
 
-int x11_connect()
+int
+x11_connect()
 {
 	con = XOpenDisplay(NULL);
 	if (con == NULL) {
@@ -29,7 +30,8 @@ int x11_connect()
 	return 0;
 }
 
-int open_window(int x, int y, int w, int h, int bw)
+int
+open_window(int x, int y, int w, int h, int bw)
 {
 	XSetWindowAttributes xwa = {
 		.background_pixel  = bg_color.pixel,
@@ -61,13 +63,15 @@ int open_window(int x, int y, int w, int h, int bw)
 	return 0;
 }
 
-int grab_keyboard()
+int
+grab_keyboard()
 {
 	while (XGrabKeyboard(con, root, 1, GrabModeAsync, GrabModeAsync, CurrentTime) != GrabSuccess);
 	return 0;
 }
 
-int next_event()
+int
+next_event()
 {
 	if (XNextEvent(con,&current_event)) {
 		return -1;
@@ -86,17 +90,20 @@ int next_event()
 	return 0;
 }
 
-XEvent event()
+XEvent
+event()
 {
 	return current_event;
 }
 
-KeySym which_key()
+KeySym
+which_key()
 {
 	return key.keysym;
 }
 
-struct text* key_to_text()
+struct text *
+key_to_text()
 {
 	return &key.text;
 }
